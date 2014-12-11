@@ -1,0 +1,28 @@
+{
+    "name": "Gesha87/acra",
+    "description": "Acra server for Android Crash Reports",
+    "keywords": ["acra", "yii2"],
+    "homepage": "https://github.com/Gesha87/acra",
+    "type": "project",
+    "support": {
+        "source": "https://github.com/Gesha87/acra"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+		"yiisoft/yii2-mongodb": "*",
+		"miloschuman/yii2-highcharts-widget": "*",
+		"cakebake/yii2-bootstrap-select": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}
