@@ -2,15 +2,16 @@
     "name": "Gesha87/acra",
     "description": "Acra server for Android Crash Reports",
     "keywords": ["acra", "yii2"],
-    "homepage": "https://github.com/Gesha87/acra",
+    "homepage": "https://github.com/Gesha87/carat",
     "type": "project",
     "support": {
-        "source": "https://github.com/Gesha87/acra"
+        "source": "https://github.com/Gesha87/carat"
     },
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
+		"yiisoft/yii2-debug": "*",
         "yiisoft/yii2-bootstrap": "*",
 		"yiisoft/yii2-mongodb": "*",
 		"miloschuman/yii2-highcharts-widget": "*",

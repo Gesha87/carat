@@ -103,3 +103,7 @@ a.desc:after {
 .grid-view {
 	margin-top: 20px;
 }
+
+.highcharts-container {
+	margin-top: 20px;
+}
