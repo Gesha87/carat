@@ -96,9 +96,7 @@ class SiteController extends Controller
 
 		$collection = $db->getCollection('crash');
 		$pipelines = [];
-		if ($model->app) {
-			$pipelines['match']['$match']['package_name'] = $model->app;
-		}
+		$pipelines['match']['$match']['package_name'] = (string)$model->app;
 		if ($model->version) {
 			$pipelines['match']['$match']['app_version_name'] = $model->version;
 		}
