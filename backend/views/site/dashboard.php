@@ -139,6 +139,13 @@ echo \yii\grid\GridView::widget([
 			]);
 		}],
 	],
+	'rowOptions' => function ($model, $key, $index, $grid) {
+		if ($model['res'] > 0) {
+			return ['class' => 'alert-success'];
+		}
+
+		return [];
+	}
 ]);
 ?>
 
