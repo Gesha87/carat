@@ -69,6 +69,7 @@ $form = \yii\bootstrap\ActiveForm::begin([
 	]);
 $form->end();
 echo \miloschuman\highcharts\Highstock::widget([
+	'id' => 'chart',
 	'options' => [
 		'navigator' => ['enabled' => false],
 		'scrollbar' => ['enabled' => false],

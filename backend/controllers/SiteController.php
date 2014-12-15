@@ -138,6 +138,7 @@ class SiteController extends Controller
 			$date = strtotime($point['_id']['year'].'-'.$point['_id']['month'].'-'.$point['_id']['day']);
 			$data[$date] = array($date * 1000, $point['count']);
 		}
+		ksort($data);
 		$series[] = array(
 			'language' => 'ru',
 			'data' => array_values($data),

@@ -120,3 +120,7 @@ a.desc:after {
 #bugfilter-search {
 	width: 100%;
 }
+
+#chart {
+	height: 250px;
+}

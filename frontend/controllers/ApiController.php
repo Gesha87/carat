@@ -50,12 +50,12 @@ class ApiController extends Controller
 				'package_name' => $packageName,
 				'hash' => $hash,
 				'hash_mini' => $hashMini,
-				'stack_trace' => $stackTrace,
-				'stack_trace_mini' => $stackTraceMini,
+				'stack_trace' => iconv('UTF-8', 'UTF-8//IGNORE', $stackTrace),
+				'stack_trace_mini' => iconv('UTF-8', 'UTF-8//IGNORE', $stackTraceMini),
 				'app_version_name' => $appVersionName,
 				'app_version_code' => $appVersionCode,
 				'user_crash_date' => $userCrashDate,
-				'full_info' => $fullInfo
+				'full_info' => iconv('UTF-8', 'UTF-8//IGNORE', $fullInfo)
 			]);
 			Yii::$app->response->data['data'] = [
 				'status' => true
