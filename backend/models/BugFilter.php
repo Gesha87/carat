@@ -9,11 +9,12 @@ class BugFilter extends Model
 	public $period = '';
 	public $group = 'hash_mini';
 	public $app = '';
+	public $search = '';
 
 	public function rules()
 	{
 		return [
-			[['version', 'period', 'group', 'app'], 'safe']
+			[['version', 'period', 'group', 'app', 'search'], 'safe']
 		];
 	}
 }

@@ -35,7 +35,18 @@ $form = \yii\bootstrap\ActiveForm::begin([
 	]);
 	echo '&nbsp;';
 	echo $form->field($model, 'group')->radioList(['hash' => Yii::t('app', 'BUG_FILTER_GROUP_HASH'), 'hash_mini' => Yii::t('app', 'BUG_FILTER_GROUP_HASH_MINI')], [
-		'onchange' => '$("#form-filter").submit()'
+		'onchange' => '$("#form-filter").submit()',
+		'data-toggle'=>'buttons',
+		'class' => 'btn-group',
+		'item' => function ($index, $label, $name, $checked, $value) {
+			return Html::radio($name, $checked, [
+				'value' => $value,
+				'label' => $label,
+				'labelOptions' => [
+					'class' => 'btn btn-default' . ($checked ? ' active' : '')
+				]
+			]);
+		}
 	]);
 	echo '&nbsp;';
 	echo $form->field($model, 'version')->dropDownList($versions, [
@@ -52,6 +63,9 @@ $form = \yii\bootstrap\ActiveForm::begin([
 		'prompt' => Yii::t('app', 'BUG_FILTER_PERIOD_PROMPT'),
 		'class' => 'selectpicker',
 		'onchange' => '$("#form-filter").submit()',
+	]);
+	echo $form->field($model, 'search')->textInput([
+		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCH_PLACEHOLDER'),
 	]);
 $form->end();
 echo \miloschuman\highcharts\Highstock::widget([

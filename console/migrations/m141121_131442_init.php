@@ -15,24 +15,10 @@ class m141121_131442_init extends Migration
 		$this->createIndex('crash', 'user_crash_date');
 		$this->createIndex('crash', 'package_name');
 		$this->createIndex('crash', ['full_info' => 'text']);
-
-		/*$this->createCollection('bug', [
-			'capped' => false,
-		]);
-		$this->createIndex('crash', 'count_crashes');
-		$this->createIndex('crash', 'last_crashed');
-
-		$this->createCollection('bug_mini', [
-			'capped' => false,
-		]);
-		$this->createIndex('crash', 'count_crashes');
-		$this->createIndex('crash', 'last_crashed');*/
     }
 
     public function down()
     {
         $this->dropCollection('crash');
-		/*$this->dropCollection('bug');
-		$this->dropCollection('bug_mini');*/
     }
 }

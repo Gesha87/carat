@@ -107,3 +107,12 @@ a.desc:after {
 .highcharts-container {
 	margin-top: 20px;
 }
+
+.field-bugfilter-search {
+	margin-top: 20px;
+	width: 100%;
+}
+
+#bugfilter-search {
+	width: 100%;
+}

@@ -45,6 +45,7 @@ return [
 	'BUG_FILTER_PERIOD_DAY' => 'За день',
 	'BUG_FILTER_PERIOD_WEEK' => 'За неделю',
 	'BUG_FILTER_PERIOD_MONTH' => 'За месяц',
+	'BUG_FILTER_SEARCH_PLACEHOLDER' => 'Поиск...',
 
 	'CRASH_LINK_BACK' => 'Назад к ошибке',
 ];

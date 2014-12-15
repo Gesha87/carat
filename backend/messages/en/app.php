@@ -45,6 +45,7 @@ return [
 	'BUG_FILTER_PERIOD_DAY' => 'Day',
 	'BUG_FILTER_PERIOD_WEEK' => 'Week',
 	'BUG_FILTER_PERIOD_MONTH' => 'Month',
+	'BUG_FILTER_SEARCH_PLACEHOLDER' => 'Search...',
 
 	'CRASH_LINK_BACK' => 'Back to bug',
 ];

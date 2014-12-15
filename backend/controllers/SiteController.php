@@ -8,6 +8,7 @@ use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\data\Sort;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\mongodb\Connection;
 use yii\mongodb\Query;
@@ -148,6 +149,13 @@ class SiteController extends Controller
 			)
 		);
 
+		if ($model->search) {
+			array_unshift($pipelines, [
+				'$match' => [
+					'$text' => ['$search' => $model->search],
+				]
+			]);
+		}
 		$pipelines['group'] = [
 			'$group' => [
 				'_id' => $group,
