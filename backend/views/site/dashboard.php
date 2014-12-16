@@ -24,6 +24,7 @@ $groupBy = $model->group;
 $form = \yii\bootstrap\ActiveForm::begin([
 	'id' => 'form-filter',
 	'method' => 'get',
+	'action' => '/dashboard?',
 	'layout' => 'inline',
 	'fieldConfig' => [
 		'template' => "{beginWrapper}\n{input}\n{endWrapper}",
