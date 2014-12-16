@@ -91,7 +91,12 @@ class SiteController extends Controller
 			$model->setAttributes($attributes);
 		}
 		if (!$model->app && $apps) {
-			$model->app = reset($apps);
+			foreach ($apps as $app) {
+				if ($app) {
+					$model->app = $app;
+					break;
+				}
+			}
 		}
 
 		$collection = $db->getCollection('crash');
