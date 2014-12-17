@@ -74,14 +74,6 @@ class SiteController extends Controller
 		$attributes = Yii::$app->getRequest()->getQueryParam('BugFilter');
 		$model = new BugFilter();
 
-		$versions = (new Query())
-			->from('crash')
-			->distinct('app_version_name');
-		$versions = array_combine($versions, $versions);
-		foreach ($versions as $i => $v) {
-			$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
-		}
-
 		$apps = (new Query())
 			->from('crash')
 			->distinct('package_name');
@@ -97,6 +89,15 @@ class SiteController extends Controller
 					break;
 				}
 			}
+		}
+
+		$versions = (new Query())
+			->from('crash')
+			->where(['package_name' => $model->app])
+			->distinct('app_version_name');
+		$versions = array_combine($versions, $versions);
+		foreach ($versions as $i => $v) {
+			$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
 		}
 
 		$collection = $db->getCollection('crash');
@@ -166,7 +167,7 @@ class SiteController extends Controller
 					$date -= 3600 * 24 * 30;
 					break;
 			}
-			$pipelines['match']['$match']['user_crashed_date'] = ['$gte' => new \MongoDate($date)];
+			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($date)];
 		}
 		$pipelines['group'] = [
 			'$group' => [
