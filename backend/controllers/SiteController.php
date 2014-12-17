@@ -99,6 +99,9 @@ class SiteController extends Controller
 		foreach ($versions as $i => $v) {
 			$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
 		}
+		uksort($versions, function($first, $second) {
+			return version_compare($first, $second, '>');
+		});
 
 		$collection = $db->getCollection('crash');
 		$pipelines = [];
@@ -230,7 +233,7 @@ class SiteController extends Controller
 		$field = $useful ? 'hash_mini' : 'hash';
 		$crashes = $collection->find([
 			$field => $hash
-		]);
+		])->sort(['_id' => -1]);
 		$models = [];
 		foreach ($crashes as $crash) {
 			$fullInfo = Json::decode($crash['full_info']);

@@ -141,11 +141,7 @@ echo \yii\grid\GridView::widget([
 		}],
 	],
 	'rowOptions' => function ($model, $key, $index, $grid) {
-		if ($model['res'] > 0) {
-			return ['class' => 'alert-success'];
-		}
-
-		return [];
+		return ['class' => $model['res'] > 0 ? ($model['res'] >= $model['avc'] ? 'alert-success' : 'alert-danger') : ''];
 	}
 ]);
 ?>

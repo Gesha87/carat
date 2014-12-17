@@ -47,7 +47,15 @@ echo \yii\grid\GridView::widget([
 		['attribute' => 'PHONE_MODEL', 'label' => Yii::t('app', 'BUG_PHONE_MODEL'), 'format' => 'raw', 'value' => function($model) {
 			if (isset($model['PHONE_MODEL'])) {
 				$phoneModel = urlencode($model['PHONE_MODEL']);
-				return Html::a($model['PHONE_MODEL'], 'https://www.google.ru/?q='.$phoneModel.'#newwindow=1&q='.$phoneModel, ['target' => '_blank']);
+				$return = Html::a($model['PHONE_MODEL'], 'https://www.google.ru/?q='.$phoneModel.'#newwindow=1&q='.$phoneModel, ['target' => '_blank']);
+				if (isset($model['BUILD'])) {
+					preg_match('/DEVICE=(.+)/', $model['BUILD'], $matches);
+					if (($device = @$matches[1]) && strcmp($device, $model['PHONE_MODEL'])) {
+						$phoneModel = urlencode($device);
+						$return .= ' ('.Html::a($device, 'https://www.google.ru/?q='.$phoneModel.'#newwindow=1&q='.$phoneModel, ['target' => '_blank']).')';
+					}
+				}
+				return $return;
 			}
 
 			return null;
@@ -79,4 +87,7 @@ echo \yii\grid\GridView::widget([
 			return \yii\helpers\Url::toRoute(['site/crash', 'id' => $model['id']]);
 		}]
 	],
+	'rowOptions' => function ($model, $key, $index, $grid) {
+		return ['class' => $model['resolved'] ? 'alert-success' : ''];
+	}
 ]);

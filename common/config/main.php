@@ -1,5 +1,6 @@
 <?php
 return [
+	'name' => 'CARAT',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
 		'mongodb' => [
