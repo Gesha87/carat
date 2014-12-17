@@ -13,6 +13,9 @@ return [
 	'defaultRoute' => 'api/send',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+		'request' => [
+			'enableCsrfValidation' => false,
+		],
 		'response' => [
 			'format' => \yii\web\Response::FORMAT_JSON,
 		],
