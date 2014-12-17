@@ -14,7 +14,6 @@ class m141121_131442_init extends Migration
 		$this->createIndex('crash', 'app_version_name');
 		$this->createIndex('crash', 'user_crash_date');
 		$this->createIndex('crash', 'package_name');
-		$this->createIndex('crash', ['full_info' => 'text']);
     }
 
     public function down()
