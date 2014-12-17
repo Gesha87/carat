@@ -156,6 +156,18 @@ class SiteController extends Controller
 		if ($model->search) {
 			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/");
 		}
+		if ($model->period) {
+			$date = strtotime(date('Y-m-d'));
+			switch ($model->period) {
+				case 'week':
+					$date -= 3600 * 24 * 7;
+					break;
+				case 'month':
+					$date -= 3600 * 24 * 30;
+					break;
+			}
+			$pipelines['match']['$match']['user_crashed_date'] = ['$gte' => new \MongoDate($date)];
+		}
 		$pipelines['group'] = [
 			'$group' => [
 				'_id' => $group,
@@ -170,22 +182,6 @@ class SiteController extends Controller
 				'res' => ['$max' => '$resolved'],
 			]
 		];
-		if ($model->period) {
-			$date = strtotime(date('Y-m-d'));
-			switch ($model->period) {
-				case 'week':
-					$date -= 3600 * 24 * 7;
-					break;
-				case 'month':
-					$date -= 3600 * 24 * 30;
-					break;
-			}
-			$pipelines['having'] = [
-				'$match' => [
-					'ucd' => ['$gte' => new \MongoDate($date)]
-				]
-			];
-		}
 		$pipelines['count'] = ['$group' => ['_id' => null, 'count' => ['$sum' => 1]]];
 		$result = $collection->aggregate(array_values($pipelines));
 		unset($pipelines['count']);
