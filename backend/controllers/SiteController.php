@@ -154,11 +154,7 @@ class SiteController extends Controller
 		);
 
 		if ($model->search) {
-			array_unshift($pipelines, [
-				'$match' => [
-					'$text' => ['$search' => $model->search],
-				]
-			]);
+			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/");
 		}
 		$pipelines['group'] = [
 			'$group' => [
