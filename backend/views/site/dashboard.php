@@ -129,6 +129,7 @@ echo \yii\grid\GridView::widget([
 		['attribute' => 'avc', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_VERSION_CODE'), 'format' => 'text'],
 		['attribute' => 'ucd', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_CRASHED'), 'format' => 'raw', 'value' => function($model) {
 			$time = is_object($model['ucd']) ? $model['ucd']->sec : 0;
+			$time < 0 AND $time = 0;
 			return '<span class="glyphicon glyphicon-time"></span>&nbsp;'.Yii::$app->formatter->asDatetime($time, 'short');
 		}],
 		['attribute' => 'res', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_RESOLVE'), 'format' => 'raw', 'value' => function($model) use ($groupBy) {

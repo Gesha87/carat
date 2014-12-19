@@ -61,7 +61,9 @@ echo \yii\grid\GridView::widget([
 			return null;
 		}],
 		['attribute' => 'USER_CRASH_DATE', 'label' => Yii::t('app', 'BUG_USER_CRASH_DATE'), 'format' => 'raw', 'value' => function($model) {
-			return Html::tag('span', '', ['class' => 'glyphicon glyphicon-time']).'&nbsp;'.Yii::$app->formatter->asDatetime(strtotime($model['USER_CRASH_DATE']), 'short');
+			$time = strtotime($model['USER_CRASH_DATE']);
+			$time < 0 AND $time = 0;
+			return Html::tag('span', '', ['class' => 'glyphicon glyphicon-time']).'&nbsp;'.Yii::$app->formatter->asDatetime($time, 'short');
 		}],
 		['attribute' => 'CRASH_CONFIGURATION', 'label' => Yii::t('app', 'BUG_CRASH_CONFIGURATION'), 'format' => 'raw', 'value' => function($model) {
 			preg_match('/locale=(.*)/', @$model['CRASH_CONFIGURATION'], $matches);
