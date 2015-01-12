@@ -158,7 +158,10 @@ class SiteController extends Controller
 		);
 
 		if ($model->search) {
-			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/");
+			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/i");
+		}
+		if ($model->searchNot) {
+			$pipelines['notmatch']['$match']['full_info']['$not'] = new \MongoRegex("/$model->searchNot/i");
 		}
 		if ($model->period) {
 			$date = strtotime(date('Y-m-d'));

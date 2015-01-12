@@ -112,12 +112,12 @@ a.desc:after {
 	margin-top: 20px;
 }
 
-.field-bugfilter-search {
+.field-bugfilter-search, .field-bugfilter-searchnot {
 	margin-top: 20px;
 	width: 100%;
 }
 
-#bugfilter-search {
+#bugfilter-search, #bugfilter-searchnot {
 	width: 100%;
 }
 

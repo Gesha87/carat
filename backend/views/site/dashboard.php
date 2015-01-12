@@ -68,6 +68,10 @@ $form = \yii\bootstrap\ActiveForm::begin([
 	echo $form->field($model, 'search')->textInput([
 		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCH_PLACEHOLDER'),
 	]);
+	echo $form->field($model, 'searchNot')->textInput([
+		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCHNOT_PLACEHOLDER'),
+	]);
+	echo Html::submitButton('Submit', ['class' => 'hidden']);
 $form->end();
 echo \miloschuman\highcharts\Highstock::widget([
 	'id' => 'chart',
