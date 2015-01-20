@@ -44,9 +44,7 @@ class ApiController extends Controller
 			$appVersionName = $acraParams['APP_VERSION_NAME'];
 			$appVersionCode = (int)$acraParams['APP_VERSION_CODE'];
 			$userCrashDate = new \MongoDate(strtotime($acraParams['USER_CRASH_DATE']));
-			/* @var $collection Collection */
-			$collection = Yii::$app->mongodb->getCollection('crash');
-			$collection->insert([
+			$document = [
 				'package_name' => $packageName,
 				'hash' => $hash,
 				'hash_mini' => $hashMini,
@@ -56,7 +54,14 @@ class ApiController extends Controller
 				'app_version_code' => $appVersionCode,
 				'user_crash_date' => $userCrashDate,
 				'full_info' => iconv('UTF-8', 'UTF-8//IGNORE', $fullInfo)
-			]);
+			];
+			$customData = (string)@$acraParams['CUSTOM_DATA'];
+			if (strpos($customData, 'logType = info') !== false) {
+				$document['info'] = 1;
+			}
+			/* @var $collection Collection */
+			$collection = Yii::$app->mongodb->getCollection('crash');
+			$collection->insert($document);
 			Yii::$app->response->data['data'] = [
 				'status' => true
 			];
