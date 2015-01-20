@@ -70,6 +70,12 @@ $form = \yii\bootstrap\ActiveForm::begin([
 		'class' => 'selectpicker',
 		'onchange' => '$("#form-filter").submit()',
 	]);
+	echo '&nbsp;';
+	echo Html::activeCheckbox($model, 'correctable', [
+		'label' => Yii::t('app', 'BUG_FILTER_IS_CORRECTABLE'),
+		'onchange' => '$("#form-filter").submit()',
+		'labelOptions' => ['class' => 'checkbox']
+	]);
 	echo '<br>';
 	echo $form->field($model, 'period')->dropDownList([
 		'day' => Yii::t('app', 'BUG_FILTER_PERIOD_DAY'),

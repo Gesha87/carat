@@ -49,6 +49,7 @@ return [
 	'BUG_FILTER_PERIOD_MONTH' => 'Month',
 	'BUG_FILTER_SEARCH_PLACEHOLDER' => 'Search...',
 	'BUG_FILTER_SEARCHNOT_PLACEHOLDER' => 'Search (NOT)...',
+	'BUG_FILTER_IS_CORRECTABLE' => 'Correctable',
 
 	'CRASH_LINK_BACK' => 'Back to bug',
 ];

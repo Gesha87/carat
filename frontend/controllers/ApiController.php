@@ -30,12 +30,14 @@ class ApiController extends Controller
 			$fullInfo = json_encode($acraParams);
 			$packageName = $acraParams['PACKAGE_NAME'];
 			$stackTrace = $acraParams['STACK_TRACE'];
-			$stackTrace = preg_replace('/Bitmap@.+/i', 'Bitmap', $stackTrace, 1);
+			$stackTrace = preg_replace('/@[0-9a-f]+/', '', $stackTrace, 1);
 			$stack = explode("\n", $stackTrace);
 			$stackTraceMini = $stack[0];
+			$correctable = false;
 			foreach ($stack as $line) {
 				if (strpos($line, 'at '.$packageName) !== false) {
 					$stackTraceMini .= "\n...".$line;
+					$correctable = true;
 					break;
 				}
 			}
@@ -58,6 +60,9 @@ class ApiController extends Controller
 			$customData = (string)@$acraParams['CUSTOM_DATA'];
 			if (strpos($customData, 'logType = info') !== false) {
 				$document['info'] = 1;
+			}
+			if ($correctable) {
+				$document['correctable'] = 1;
 			}
 			/* @var $collection Collection */
 			$collection = Yii::$app->mongodb->getCollection('crash');

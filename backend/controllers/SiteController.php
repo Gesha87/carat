@@ -114,6 +114,9 @@ class SiteController extends Controller
 		} else {
 			$pipelines['match']['$match']['info'] = ['$exists' => false];
 		}
+		if ($model->correctable) {
+			$pipelines['match']['$match']['correctable'] = 1;
+		}
 		$sort = new Sort([
 			'attributes' => [
 				'id' => ['default' => SORT_DESC],
