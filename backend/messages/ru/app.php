@@ -37,6 +37,8 @@ return [
 	'BUG_AVAILABLE_MEM_SIZE' => 'Доступно памяти',
 	'BUG_TOTAL_MEM_SIZE' => 'Всего памяти',
 	'BUG_CUSTOM_DATA' => 'Пользовательские данные',
+	'BUG_FILTER_TYPE_BUG' => 'Ошибки',
+	'BUG_FILTER_TYPE_INFO' => 'Информация',
 	'BUG_FILTER_GROUP_HASH' => 'Группировка по Stacktrace',
 	'BUG_FILTER_GROUP_HASH_MINI' => 'Группировка по полезному',
 	'BUG_FILTER_VERSION_PROMPT' => 'Все версии',

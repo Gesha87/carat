@@ -5,6 +5,7 @@ use yii\base\Model;
 
 class BugFilter extends Model
 {
+	public $info = 0;
 	public $version = '';
 	public $period = '';
 	public $group = 'hash_mini';
@@ -15,7 +16,7 @@ class BugFilter extends Model
 	public function rules()
 	{
 		return [
-			[['version', 'period', 'group', 'app', 'search', 'searchNot'], 'safe']
+			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot'], 'safe']
 		];
 	}
 }

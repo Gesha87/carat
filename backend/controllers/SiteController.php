@@ -109,6 +109,11 @@ class SiteController extends Controller
 		if ($model->version) {
 			$pipelines['match']['$match']['app_version_name'] = $model->version;
 		}
+		if ($model->info) {
+			$pipelines['match']['$match']['info'] = 1;
+		} else {
+			$pipelines['match']['$match']['info'] = ['$exists' => false];
+		}
 		$sort = new Sort([
 			'attributes' => [
 				'id' => ['default' => SORT_DESC],

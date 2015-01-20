@@ -35,6 +35,21 @@ $form = \yii\bootstrap\ActiveForm::begin([
 		'onchange' => '$("#form-filter").submit()',
 	]);
 	echo '&nbsp;';
+	echo $form->field($model, 'info')->radioList([0 => Yii::t('app', 'BUG_FILTER_TYPE_BUG'), 1 => Yii::t('app', 'BUG_FILTER_TYPE_INFO')], [
+		'onchange' => '$("#form-filter").submit()',
+		'data-toggle'=>'buttons',
+		'class' => 'btn-group',
+		'item' => function ($index, $label, $name, $checked, $value) {
+			return Html::radio($name, $checked, [
+				'value' => $value,
+				'label' => $label,
+				'labelOptions' => [
+					'class' => 'btn btn-default' . ($checked ? ' active' : '')
+				]
+			]);
+		}
+	]);
+	echo '&nbsp;';
 	echo $form->field($model, 'group')->radioList(['hash' => Yii::t('app', 'BUG_FILTER_GROUP_HASH'), 'hash_mini' => Yii::t('app', 'BUG_FILTER_GROUP_HASH_MINI')], [
 		'onchange' => '$("#form-filter").submit()',
 		'data-toggle'=>'buttons',
@@ -55,7 +70,7 @@ $form = \yii\bootstrap\ActiveForm::begin([
 		'class' => 'selectpicker',
 		'onchange' => '$("#form-filter").submit()',
 	]);
-	echo '&nbsp;';
+	echo '<br>';
 	echo $form->field($model, 'period')->dropDownList([
 		'day' => Yii::t('app', 'BUG_FILTER_PERIOD_DAY'),
 		'week' => Yii::t('app', 'BUG_FILTER_PERIOD_WEEK'),
