@@ -43,13 +43,16 @@ return [
 	'BUG_FILTER_GROUP_HASH_MINI' => 'Group by useful',
 	'BUG_FILTER_VERSION_PROMPT' => 'All versions',
 	'BUG_FILTER_VERSION' => 'Version',
-	'BUG_FILTER_PERIOD_PROMPT' => 'All time',
+	'BUG_FILTER_PERIOD_PROMPT' => 'Period',
 	'BUG_FILTER_PERIOD_DAY' => 'Day',
 	'BUG_FILTER_PERIOD_WEEK' => 'Week',
 	'BUG_FILTER_PERIOD_MONTH' => 'Month',
 	'BUG_FILTER_SEARCH_PLACEHOLDER' => 'Search...',
 	'BUG_FILTER_SEARCHNOT_PLACEHOLDER' => 'Search (NOT)...',
-	'BUG_FILTER_IS_CORRECTABLE' => 'Correctable',
+	'BUG_FILTER_IS_CORRECTABLE' => 'Resolvable',
+	'BUG_FILTER_DATE_RANGE_TO' => 'to',
+	'BUG_FILTER_SUBMIT' => 'Apply',
+	'BUG_FILTER_DATE_RANGE_CLEAR' => 'Clear',
 
 	'CRASH_LINK_BACK' => 'Back to bug',
 ];

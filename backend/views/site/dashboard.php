@@ -1,4 +1,6 @@
 <?php
+use kartik\daterange\DateRangePicker;
+use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -21,7 +23,7 @@ cakebake\bootstrap\select\BootstrapSelectAsset::register($this, [
 $this->title = Yii::t('app', 'TITLE_BUGS');
 $groupBy = $model->group;
 
-$form = \yii\bootstrap\ActiveForm::begin([
+$form = ActiveForm::begin([
 	'id' => 'form-filter',
 	'method' => 'get',
 	'action' => '/dashboard?',
@@ -77,22 +79,34 @@ $form = \yii\bootstrap\ActiveForm::begin([
 		'labelOptions' => ['class' => 'checkbox']
 	]);
 	echo '<br>';
-	echo $form->field($model, 'period')->dropDownList([
-		'day' => Yii::t('app', 'BUG_FILTER_PERIOD_DAY'),
-		'week' => Yii::t('app', 'BUG_FILTER_PERIOD_WEEK'),
-		'month' => Yii::t('app', 'BUG_FILTER_PERIOD_MONTH')
-	], [
-		'prompt' => Yii::t('app', 'BUG_FILTER_PERIOD_PROMPT'),
-		'class' => 'selectpicker',
-		'onchange' => '$("#form-filter").submit()',
+	echo $form->field($model, 'dateRange')->widget(DateRangePicker::className(), [
+		'readonly' => true,
+		'presetDropdown' => true,
+		//'hideInput' => true,
+		'convertFormat' => true,
+		'callback' => 'function() { $("#form-filter").submit(); }',
+		'pluginOptions' => [
+			'separator' => ' - ',
+			'format' => 'Y-m-d',
+			'maxDate' => date('Y-m-d'),
+		],
 	]);
+	echo '&nbsp;';
+	echo Html::beginTag('div', ['class' => 'form-group']);
+	echo Html::button(Yii::t('app', 'BUG_FILTER_DATE_RANGE_CLEAR'), [
+		'class' => 'btn btn-warning',
+		'onclick' => '$("#bugfilter-daterange").val(""); $("#form-filter").submit();',
+	]);
+	echo Html::submitButton(Yii::t('app', 'BUG_FILTER_SUBMIT'), [
+		'class' => 'hidden',
+	]);
+	echo Html::endTag('div');
 	echo $form->field($model, 'search')->textInput([
 		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCH_PLACEHOLDER'),
 	]);
 	echo $form->field($model, 'searchNot')->textInput([
 		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCHNOT_PLACEHOLDER'),
 	]);
-	echo Html::submitButton('Submit', ['class' => 'hidden']);
 $form->end();
 echo \miloschuman\highcharts\Highstock::widget([
 	'id' => 'chart',

@@ -43,13 +43,16 @@ return [
 	'BUG_FILTER_GROUP_HASH_MINI' => 'Группировка по полезному',
 	'BUG_FILTER_VERSION_PROMPT' => 'Все версии',
 	'BUG_FILTER_VERSION' => 'Версия',
-	'BUG_FILTER_PERIOD_PROMPT' => 'За всё время',
+	'BUG_FILTER_PERIOD_PROMPT' => 'За период',
 	'BUG_FILTER_PERIOD_DAY' => 'За день',
 	'BUG_FILTER_PERIOD_WEEK' => 'За неделю',
 	'BUG_FILTER_PERIOD_MONTH' => 'За месяц',
 	'BUG_FILTER_SEARCH_PLACEHOLDER' => 'Поиск...',
 	'BUG_FILTER_SEARCHNOT_PLACEHOLDER' => 'Поиск (НЕ)...',
 	'BUG_FILTER_IS_CORRECTABLE' => 'Можем исправить',
+	'BUG_FILTER_DATE_RANGE_TO' => 'до',
+	'BUG_FILTER_SUBMIT' => 'Применить',
+	'BUG_FILTER_DATE_RANGE_CLEAR' => 'Очистить',
 
 	'CRASH_LINK_BACK' => 'Назад к ошибке',
 ];

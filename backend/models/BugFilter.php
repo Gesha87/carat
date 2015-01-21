@@ -13,11 +13,12 @@ class BugFilter extends Model
 	public $search = '';
 	public $searchNot = '';
 	public $correctable = 1;
+	public $dateRange;
 
 	public function rules()
 	{
 		return [
-			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot', 'correctable'], 'safe']
+			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot', 'correctable', 'dateRange'], 'safe']
 		];
 	}
 }

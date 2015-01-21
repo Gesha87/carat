@@ -132,11 +132,19 @@ class SiteController extends Controller
 
 		$to = strtotime(date('Y-m-d'));
 		$from = $to - 3600 * 24 * 7;
+		if ($model->dateRange) {
+			$parts = explode(' - ', $model->dateRange);
+			if (count($parts) == 2) {
+				$from = strtotime($parts[0]);
+				$to = strtotime($parts[1]);
+			}
+		}
+
 		$data = [];
 		for ($i = $from; $i <= $to; $i += 3600 * 24) {
 			$data[$i] = array($i * 1000, 0);
 		}
-		$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from)];
+		$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
 		$pipelines['graph'] = [
 			'$group' => [
 				'_id' => [
@@ -148,7 +156,10 @@ class SiteController extends Controller
 			]
 		];
 		$graph = $collection->aggregate(array_values($pipelines));
-		unset($pipelines['graph'], $pipelines['match']['$match']['user_crash_date']);
+		unset($pipelines['graph']);
+		if (!$model->dateRange) {
+			unset($pipelines['match']['$match']['user_crash_date']);
+		}
 		foreach ($graph as $point) {
 			$date = strtotime($point['_id']['year'].'-'.$point['_id']['month'].'-'.$point['_id']['day']);
 			$data[$date] = array($date * 1000, $point['count']);
@@ -172,18 +183,6 @@ class SiteController extends Controller
 			$parts = explode(';', $model->searchNot);
 			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoRegex("/$i/i"); }, $parts);
 			$pipelines['notmatch']['$match']['full_info']['$not']['$in'] = $searchArray;
-		}
-		if ($model->period) {
-			$date = strtotime(date('Y-m-d'));
-			switch ($model->period) {
-				case 'week':
-					$date -= 3600 * 24 * 7;
-					break;
-				case 'month':
-					$date -= 3600 * 24 * 30;
-					break;
-			}
-			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($date)];
 		}
 		$pipelines['group'] = [
 			'$group' => [

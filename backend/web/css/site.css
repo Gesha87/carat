@@ -127,3 +127,7 @@ a.desc:after {
 #chart {
 	height: 250px;
 }
+
+#bugfilter-daterange {
+	cursor: pointer;
+}
