@@ -54,7 +54,8 @@ class ApiController extends Controller
 				'app_version_name' => $appVersionName,
 				'app_version_code' => $appVersionCode,
 				'user_crash_date' => $userCrashDate,
-				'full_info' => iconv('UTF-8', 'UTF-8//IGNORE', $fullInfo)
+				'full_info' => iconv('UTF-8', 'UTF-8//IGNORE', $fullInfo),
+				'resolved' => 0,
 			];
 			$customData = (string)@$acraParams['CUSTOM_DATA'];
 			if (strpos($customData, 'logType = info') !== false) {
