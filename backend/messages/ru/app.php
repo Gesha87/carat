@@ -53,6 +53,7 @@ return [
 	'BUG_FILTER_DATE_RANGE_TO' => 'до',
 	'BUG_FILTER_SUBMIT' => 'Применить',
 	'BUG_FILTER_DATE_RANGE_CLEAR' => 'Очистить',
+	'BUG_FILTER_HIDE_RESOLVED' => 'Скрыть исправленные',
 
 	'CRASH_LINK_BACK' => 'Назад к ошибке',
 ];

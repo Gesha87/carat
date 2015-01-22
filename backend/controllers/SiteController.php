@@ -151,6 +151,9 @@ class SiteController extends Controller
 				'res' => ['$max' => '$resolved'],
 			]
 		];
+		if ($model->hideResolved) {
+			$pipelines['hide'] = ['$match' => ['res' => 0]];
+		}
 		$pipelines['count'] = ['$group' => ['_id' => null, 'count' => ['$sum' => 1]]];
 		$result = $collection->aggregate(array_values($pipelines));
 		unset($pipelines['count']);

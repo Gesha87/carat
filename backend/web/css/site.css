@@ -131,3 +131,7 @@ a.desc:after {
 #bugfilter-daterange {
 	cursor: pointer;
 }
+
+.form-group-checkbox {
+	margin-left: 20px;
+}

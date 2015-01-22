@@ -53,6 +53,7 @@ return [
 	'BUG_FILTER_DATE_RANGE_TO' => 'to',
 	'BUG_FILTER_SUBMIT' => 'Apply',
 	'BUG_FILTER_DATE_RANGE_CLEAR' => 'Clear',
+	'BUG_FILTER_HIDE_RESOLVED' => 'Hide resolved',
 
 	'CRASH_LINK_BACK' => 'Back to bug',
 ];
