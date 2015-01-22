@@ -91,18 +91,6 @@ class SiteController extends Controller
 			}
 		}
 
-		$versions = (new Query())
-			->from('crash')
-			->where(['package_name' => $model->app])
-			->distinct('app_version_name');
-		$versions = array_combine($versions, $versions);
-		foreach ($versions as $i => $v) {
-			$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
-		}
-		uksort($versions, function($first, $second) {
-			return version_compare($first, $second, '>');
-		});
-
 		$collection = $db->getCollection('crash');
 		$pipelines = [];
 		$pipelines['match']['$match']['package_name'] = (string)$model->app;
@@ -138,44 +126,9 @@ class SiteController extends Controller
 				$from = strtotime($parts[0]);
 				$to = strtotime($parts[1]);
 			}
+			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
 		}
-
-		$data = [];
-		for ($i = $from; $i <= $to; $i += 3600 * 24) {
-			$data[$i] = array($i * 1000, 0);
-		}
-		$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
-		$pipelines['graph'] = [
-			'$group' => [
-				'_id' => [
-					'day' => ['$dayOfMonth' => '$user_crash_date'],
-					'month' => ['$month' => '$user_crash_date'],
-					'year' => ['$year' => '$user_crash_date'],
-				],
-				'count' => ['$sum' => 1],
-			]
-		];
-		$graph = $collection->aggregate(array_values($pipelines));
-		unset($pipelines['graph']);
-		if (!$model->dateRange) {
-			unset($pipelines['match']['$match']['user_crash_date']);
-		}
-		foreach ($graph as $point) {
-			$date = strtotime($point['_id']['year'].'-'.$point['_id']['month'].'-'.$point['_id']['day']);
-			$data[$date] = array($date * 1000, $point['count']);
-		}
-		ksort($data);
-		$series[] = array(
-			'language' => 'ru',
-			'data' => array_values($data),
-			'type' => 'spline',
-			'shadow' => true,
-			'marker' => array(
-				'enabled' => true,
-				'radius' => 3
-			)
-		);
-
+		$pipelinesGraph = $pipelines;
 		if ($model->search) {
 			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/i");
 		}
@@ -214,6 +167,12 @@ class SiteController extends Controller
 		$pipelines['offset'] = ['$skip' => $pages->getOffset()];
 		$pipelines['limit'] = ['$limit' => $pages->getLimit()];
 		$bugs = $collection->aggregate(array_values($pipelines));
+		foreach ($bugs as $i => $bug) {
+			if (!$bug['res']) {
+				$hash = $groupBy == 'hash' ? $bug['hash'] : $bug['hash_mini'];
+				$bugs[$i]['res'] = (int)Yii::$app->redis->hget('resolved.bugs', $hash);
+			}
+		}
 		$data = new MongoArrayDataProvider([
 			'key' => 'id',
 			'allModels' => $bugs,
@@ -221,19 +180,80 @@ class SiteController extends Controller
 			'pagination' => $pages
 		]);
 
-        return $this->render('dashboard', ['versions' => $versions, 'apps' => $apps, 'data' => $data, 'model' => $model, 'series' => $series]);
+		if (Yii::$app->request->getIsPjax()) {
+			return $this->renderPartial('_bugs', ['data' => $data, 'model' => $model]);
+		} else {
+			$versions = (new Query())
+				->from('crash')
+				->where(['package_name' => $model->app])
+				->distinct('app_version_name');
+			$versions = array_combine($versions, $versions);
+			foreach ($versions as $i => $v) {
+				$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
+			}
+			uksort($versions, function($first, $second) {
+				return version_compare($first, $second, '>');
+			});
+
+			$dataGraph = [];
+			for ($i = $from; $i <= $to; $i += 3600 * 24) {
+				$dataGraph[$i] = array($i * 1000, 0);
+			}
+			$pipelinesGraph['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
+			$pipelinesGraph['graph'] = [
+				'$group' => [
+					'_id' => [
+						'day' => ['$dayOfMonth' => '$user_crash_date'],
+						'month' => ['$month' => '$user_crash_date'],
+						'year' => ['$year' => '$user_crash_date'],
+					],
+					'count' => ['$sum' => 1],
+				]
+			];
+			$graph = $collection->aggregate(array_values($pipelinesGraph));
+			foreach ($graph as $point) {
+				$date = strtotime($point['_id']['year'].'-'.$point['_id']['month'].'-'.$point['_id']['day']);
+				$dataGraph[$date] = array($date * 1000, $point['count']);
+			}
+			ksort($dataGraph);
+			$series[] = array(
+				'data' => array_values($dataGraph),
+				'type' => 'spline',
+				'shadow' => true,
+				'marker' => array(
+					'enabled' => true,
+					'radius' => 3
+				)
+			);
+
+        	return $this->render('dashboard', ['versions' => $versions, 'apps' => $apps, 'data' => $data, 'model' => $model, 'series' => $series]);
+		}
     }
 
 	public function actionResolve()
 	{
 		/* @var $db Connection */
 		$db = Yii::$app->mongodb;
+		$redis = Yii::$app->redis;
 		$attribute = Yii::$app->request->post('attribute');
 		$hash = Yii::$app->request->post('hash');
-		$version = Yii::$app->request->post('version');
+		$version = (int)Yii::$app->request->post('version');
 
 		$collection = $db->getCollection('crash');
+		if ($version) {
+			$versions = $collection->distinct('app_version_code', [$attribute => $hash]);
+			foreach ($versions as $v) {
+				if ($v > $version) {
+					$version = $v;
+				}
+			}
+		}
 		$collection->update([$attribute => $hash], ['resolved' => $version]);
+		if ($version) {
+			$redis->hset('resolved.bugs', $hash, $version);
+		} else {
+			$redis->hdel('resolved.bugs', $hash);
+		}
 	}
 
 	public function actionBug($hash, $useful)
@@ -243,22 +263,36 @@ class SiteController extends Controller
 
 		$collection = $db->getCollection('crash');
 		$field = $useful ? 'hash_mini' : 'hash';
+
+		$count = $collection->find([
+			$field => $hash
+		])->count();
+		$pages = new Pagination([
+			'totalCount' => $count,
+			'defaultPageSize' => Yii::$app->params['countPerPage'],
+		]);
 		$crashes = $collection->find([
 			$field => $hash
-		])->sort(['_id' => -1]);
+		])->sort(['_id' => -1])->skip($pages->getOffset())->limit($pages->getLimit());
 		$models = [];
 		foreach ($crashes as $crash) {
 			$fullInfo = Json::decode($crash['full_info']);
 			$fullInfo['resolved'] = (int)@$crash['resolved'];
 			$fullInfo['id'] = (string)$crash['_id'];
+			$fullInfo['st'] = $crash['stack_trace'];
 			$models[] = $fullInfo;
 		}
-		$data = new ArrayDataProvider([
+		$data = new MongoArrayDataProvider([
 			'allModels' => $models,
-			'pagination' => false,
+			'pagination' => $pages,
+			'sort' => false,
 		]);
 
-		return $this->render('bug', ['data' => $data]);
+		if (Yii::$app->request->getIsPjax()) {
+			return $this->render('_crashes', ['data' => $data]);
+		} else {
+			return $this->render('bug', ['data' => $data]);
+		}
 	}
 
 	public function actionCrash($id)

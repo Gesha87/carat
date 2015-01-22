@@ -96,7 +96,7 @@ a.desc:after {
 
 .tooltip-inner {
 	text-align: left;
-	white-space: pre;
+	white-space: pre-wrap;
 	max-width: 1140px;
 }
 

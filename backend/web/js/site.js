@@ -1,9 +1,9 @@
 $(function() {
 	$('[data-toggle="tooltip"]').tooltip();
-	$('input[type=checkbox].resolve').change(function() {
+	$(document).on('change', 'input[type=checkbox].resolve', function() {
 		var $this = $(this);
 		var params = {
-			version: $this.data('version'),
+			version: 1,
 			hash: $this.data('hash'),
 			attribute: $this.data('attribute')
 		};
@@ -13,7 +13,7 @@ $(function() {
 		$this.hide();
 		$.post('/resolve', params, function() {
 			$this.parents('tr').toggleClass('alert-success', params.version > 0);
-		}, 'json').complete(function() {
+		}).complete(function() {
 			$this.show();
 		});
 	});

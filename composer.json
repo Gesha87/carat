@@ -16,7 +16,8 @@
 		"yiisoft/yii2-mongodb": "*",
 		"miloschuman/yii2-highcharts-widget": "*",
 		"cakebake/yii2-bootstrap-select": "*",
-        "kartik-v/yii2-date-range": "*"
+        "kartik-v/yii2-date-range": "*",
+        "yiisoft/yii2-redis": "*"
     },
     "config": {
         "process-timeout": 1800

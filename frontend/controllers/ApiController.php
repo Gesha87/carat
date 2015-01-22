@@ -30,9 +30,8 @@ class ApiController extends Controller
 			$fullInfo = json_encode($acraParams);
 			$packageName = $acraParams['PACKAGE_NAME'];
 			$stackTrace = $acraParams['STACK_TRACE'];
-			$stackTrace = preg_replace('/@[0-9a-f]+/', '', $stackTrace, 1);
 			$stack = explode("\n", $stackTrace);
-			$stackTraceMini = $stack[0];
+			$stackTraceMini = preg_replace('/:.+/', '', $stack[0], 1);
 			$correctable = false;
 			foreach ($stack as $line) {
 				if (strpos($line, 'at '.$packageName) !== false) {
