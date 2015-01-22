@@ -21,7 +21,7 @@ if ($row = reset($data->allModels)) {
 	echo Html::endTag('div');
 	echo Html::beginForm('', 'get', ['class' => 'well form-horizontal well-sm', 'onsubmit' => 'return false;']);
 		$hash = Yii::$app->getRequest()->getQueryParam('hash', '');
-		echo Html::checkbox('resolve', Yii::$app->redis->sismember('resolved.bugs', $hash), [
+		echo Html::checkbox('resolve', (bool)Yii::$app->redis->hget('resolved.bugs', $hash), [
 			'label' => Yii::t('app', 'BUG_RESOLVE'),
 			'class' => 'resolve',
 			'data-attribute' => Yii::$app->getRequest()->getQueryParam('useful') ? 'hash_mini' : 'hash',
