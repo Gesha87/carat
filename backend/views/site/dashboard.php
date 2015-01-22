@@ -70,12 +70,6 @@ $form = ActiveForm::begin([
 		'class' => 'selectpicker',
 		'onchange' => '$("#form-filter").submit()',
 	]);
-	echo '&nbsp;';
-	echo Html::activeCheckbox($model, 'correctable', [
-		'label' => Yii::t('app', 'BUG_FILTER_IS_CORRECTABLE'),
-		'onchange' => '$("#form-filter").submit()',
-		'labelOptions' => ['class' => 'checkbox']
-	]);
 	echo '<br>';
 	echo $form->field($model, 'dateRange')->widget(DateRangePicker::className(), [
 		'readonly' => true,
@@ -94,13 +88,29 @@ $form = ActiveForm::begin([
 	]);
 	echo '&nbsp;';
 	echo Html::beginTag('div', ['class' => 'form-group']);
-	echo Html::button(Yii::t('app', 'BUG_FILTER_DATE_RANGE_CLEAR'), [
-		'class' => 'btn btn-warning',
-		'onclick' => '$("#bugfilter-daterange").val(""); $("#form-filter").submit();',
-	]);
-	echo Html::submitButton(Yii::t('app', 'BUG_FILTER_SUBMIT'), [
-		'class' => 'hidden',
-	]);
+		echo Html::button(Yii::t('app', 'BUG_FILTER_DATE_RANGE_CLEAR'), [
+			'class' => 'btn btn-warning',
+			'onclick' => '$("#bugfilter-daterange").val(""); $("#form-filter").submit();',
+		]);
+		echo Html::submitButton(Yii::t('app', 'BUG_FILTER_SUBMIT'), [
+			'class' => 'hidden',
+		]);
+	echo Html::endTag('div');
+	echo '&nbsp;';
+	echo Html::beginTag('div', ['class' => 'form-group form-group-checkbox']);
+		echo Html::activeCheckbox($model, 'correctable', [
+			'label' => Yii::t('app', 'BUG_FILTER_IS_CORRECTABLE'),
+			'onchange' => '$("#form-filter").submit()',
+			'labelOptions' => ['class' => 'checkbox']
+		]);
+	echo Html::endTag('div');
+	echo '&nbsp;';
+	echo Html::beginTag('div', ['class' => 'form-group form-group-checkbox']);
+		echo Html::activeCheckbox($model, 'hideResolved', [
+			'label' => Yii::t('app', 'BUG_FILTER_HIDE_RESOLVED'),
+			'onchange' => '$("#form-filter").submit()',
+			'labelOptions' => ['class' => 'checkbox']
+		]);
 	echo Html::endTag('div');
 	echo $form->field($model, 'search')->textInput([
 		'placeholder' => Yii::t('app', 'BUG_FILTER_SEARCH_PLACEHOLDER'),
