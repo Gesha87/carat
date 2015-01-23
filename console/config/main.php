@@ -22,6 +22,13 @@ return [
                     'levels' => ['error', 'warning'],
 					'logVars' => [],
                 ],
+				[
+					'class' => 'yii\log\FileTarget',
+					'logFile' => '@runtime/logs/run.log',
+					'levels' => ['info'],
+					'categories' => ['acra'],
+					'logVars' => [],
+				],
             ],
         ],
     ],
