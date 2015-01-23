@@ -40,7 +40,6 @@ class AppController extends Controller
 			$condition['$nor'] = $nor;
 		}
 		$hashes = $collection->distinct('hash_mini', $condition);
-		$collection->remove($condition);
 		Yii::info('Found ' . count($hashes) . ' hashes to delete', 'acra');
 		if ($hashes) {
 			$params = ['resolved.bugs'];
@@ -52,6 +51,7 @@ class AppController extends Controller
 				echo "\r" . ($i + 1) . ' updated';
 			}
 			echo "\r" . ($i + 1) . " updated\n";
+			$collection->remove($condition);
 		}
 		Yii::info('Complete', 'acra');
 	}
