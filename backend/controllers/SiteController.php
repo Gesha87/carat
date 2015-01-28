@@ -135,7 +135,7 @@ class SiteController extends Controller
 		if ($model->searchNot) {
 			$parts = explode(';', $model->searchNot);
 			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoRegex("/$i/i"); }, $parts);
-			$pipelines['notmatch']['$match']['full_info']['$not']['$in'] = $searchArray;
+			$pipelines['notmatch']['$match']['stack_trace']['$not']['$in'] = $searchArray;
 		}
 		$pipelines['group'] = [
 			'$group' => [
