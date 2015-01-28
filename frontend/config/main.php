@@ -38,6 +38,7 @@ return [
 			'showScriptName' => false,
 			'rules' => [
 				'send' => 'api/send',
+				'api/sendApple' => 'api/send-apple',
 			],
 		],
         'errorHandler' => [

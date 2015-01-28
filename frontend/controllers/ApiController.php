@@ -80,6 +80,6 @@ class ApiController extends Controller
 
 	public function actionSendApple()
 	{
-		file_put_contents(date('Y-m-d H:i:s') . ' ' . Yii::getAlias('@runtime/logs/crash.log'), var_export($_POST, true) . "\n", FILE_APPEND);
+		file_put_contents(Yii::getAlias('@runtime/logs/crash.log'), date('Y-m-d H:i:s') . ' ' . var_export($_POST, true) . "\n", FILE_APPEND);
 	}
 }
