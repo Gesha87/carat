@@ -417,10 +417,11 @@ Binary Images:
 					$loadAddress = $matches[1];
 					$uuid = $matches[3];
 					$fileName = Yii::$app->redis->hget('uuid.to.dsym', $uuid);
-					if (true || $fileName) {
+					if ($fileName) {
 						$count = preg_match_all('/\n\d+\s+\S+\s+(0x[0-9a-f]+)\s/', $log, $addressMatches);
 						if ($count) {
-							echo nl2br(exec("atosl -o $fileName -l $loadAddress ".implode(' ', $addressMatches[1]), $output));
+							exec("atosl -o $fileName -l $loadAddress ".implode(' ', $addressMatches[1]), $output);
+							var_export($output);
 						}
 					}
 				}
