@@ -39,6 +39,7 @@ return [
 			'rules' => [
 				'send' => 'api/send',
 				'api/sendApple' => 'api/send-apple',
+				'api/loadDsym' => 'api/load-dsym',
 			],
 		],
         'errorHandler' => [
