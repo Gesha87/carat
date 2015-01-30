@@ -451,7 +451,11 @@ Binary Images:
 		}
 		$uuid = reset($uuids);
 		$fileName = date('Y_m_d_') . $uuid;
-		if ($file->saveAs(Yii::getAlias('@app/data/dSYMs/' . $fileName))) {
+		$dir = Yii::getAlias('@app/data/dSYMs/');
+		if (!file_exists($dir)) {
+			mkdir($dir, 0777);
+		}
+		if ($file->saveAs($dir.'/'.$fileName)) {
 			foreach ($uuids as $uuid) {
 				Yii::$app->redis->hset('uuid.to.dsym', $uuid, $fileName);
 			}
