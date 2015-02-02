@@ -15,6 +15,7 @@ use yii\mongodb\Query;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
+use yii\web\Cookie;
 
 /**
  * Site controller
@@ -82,15 +83,25 @@ class SiteController extends Controller
 		if ($attributes) {
 			$model->setAttributes($attributes);
 		}
+		$cookies = Yii::$app->request->cookies;
 		if (!$model->app && $apps) {
-			foreach ($apps as $app) {
-				if ($app) {
-					$model->app = $app;
-					break;
+			$app = $cookies['app'];
+			if ($app && in_array($app, $apps)) {
+				$model->app = $app;
+			} else {
+				foreach ($apps as $app) {
+					if ($app) {
+						$model->app = $app;
+						break;
+					}
 				}
 			}
 		}
-
+		Yii::$app->response->cookies->add(new Cookie([
+			'name' => 'app',
+			'value' => $model->app,
+			'expire' => time() + 3600 * 24 * 30
+		]));
 		$collection = $db->getCollection('crash');
 		$pipelines = [];
 		$pipelines['match']['$match']['package_name'] = (string)$model->app;
@@ -278,11 +289,16 @@ class SiteController extends Controller
 			$field => $hash
 		])->sort(['_id' => -1])->skip($pages->getOffset())->limit($pages->getLimit());
 		$models = [];
+		$iOs = false;
 		foreach ($crashes as $crash) {
 			$fullInfo = Json::decode($crash['full_info']);
 			$fullInfo['resolved'] = (int)@$crash['resolved'];
 			$fullInfo['id'] = (string)$crash['_id'];
 			$fullInfo['st'] = $crash['stack_trace'];
+			if (isset($crash['device_id'])) {
+				$iOs = true;
+				$fullInfo['pn'] = str_replace(' (iPhone)', '', $crash['package_name']);
+			}
 			$models[] = $fullInfo;
 		}
 		$data = new MongoArrayDataProvider([
@@ -291,10 +307,18 @@ class SiteController extends Controller
 			'sort' => false,
 		]);
 
-		if (Yii::$app->request->getIsPjax()) {
-			return $this->render('_crashes', ['data' => $data]);
+		if ($iOs) {
+			if (Yii::$app->request->getIsPjax()) {
+				return $this->render('_crashes_ios', ['data' => $data]);
+			} else {
+				return $this->render('bug_ios', ['data' => $data]);
+			}
 		} else {
-			return $this->render('bug', ['data' => $data]);
+			if (Yii::$app->request->getIsPjax()) {
+				return $this->render('_crashes', ['data' => $data]);
+			} else {
+				return $this->render('bug', ['data' => $data]);
+			}
 		}
 	}
 

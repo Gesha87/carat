@@ -30,6 +30,7 @@ return [
 	'BUG_APP_VERSION_NAME' => 'Версия',
 	'BUG_APP_VERSION_CODE' => 'Код',
 	'BUG_ANDROID_VERSION' => 'Андроид',
+	'BUG_IOS_VERSION' => 'iOS',
 	'BUG_PHONE_MODEL' => 'Телефон',
 	'BUG_USER_CRASH_DATE' => 'Упало',
 	'BUG_CRASH_CONFIGURATION' => 'Язык',
