@@ -162,9 +162,7 @@ class ApiController extends Controller
 						unset($output);
 						if ($fileName) {
 							$fileName = Yii::getAlias('@app/data/dSYMs').'/'.$fileName;
-							var_dump($fileName);
-							exec("atosl -A $architecture -o \"$fileName\" -l $loadAddress $addresses", $output);
-							var_dump($output);
+							exec("atosl -A $architecture -o $fileName -l $loadAddress $addresses", $output);
 							if ($output) {
 								foreach ($output as $i => $line) {
 									$address = @$addressMatches[1][$i];
