@@ -157,7 +157,7 @@ class ApiController extends Controller
 					$count = preg_match_all('/\n\d+\s+'.$appName.'+\s+(0x[0-9a-f]+)\s+.+/', $log, $addressMatches);
 					if ($count) {
 						$linesMini = $addressMatches[0];
-						$linesMini = array_map('trim', $linesMini);
+						$linesMini = array_map(function($v) { preg_replace('/^\d+/', '', trim($v)); }, $linesMini);
 						$addresses = implode(' ', $addressMatches[1]);
 						unset($output);
 						if ($fileName) {
