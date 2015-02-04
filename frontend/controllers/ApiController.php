@@ -174,6 +174,7 @@ class ApiController extends Controller
 							}
 						}
 						$miniLog = implode("\n", $linesMini);
+						$miniLog = preg_replace('/\s+/', ' ', $miniLog);
 					}
 				}
 				$userCrashDate = new \MongoDate(time());
