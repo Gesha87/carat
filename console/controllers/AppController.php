@@ -7,7 +7,7 @@ use yii\mongodb\Connection;
 
 class AppController extends Controller
 {
-	public function actionClear()
+	public function actionClear($d = 30)
 	{
 		/* @var $db Connection */
 		$db = Yii::$app->mongodb;
@@ -34,7 +34,7 @@ class AppController extends Controller
 			}
 		}
 
-		$edge = time() - 3600 * 24 * 30;
+		$edge = time() - 3600 * 24 * $d;
 		$condition =  ['user_crash_date' => ['$lt' => new \MongoDate($edge)]];
 		if ($nor) {
 			$condition['$nor'] = $nor;
