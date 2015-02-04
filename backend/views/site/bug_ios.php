@@ -12,12 +12,12 @@ if ($row = reset($data->allModels)) {
 	echo Html::tag('h2', Yii::t('app', 'BUG_STACK_TRACE'));
 	$stack = explode("\n", $row['st']);
 	$packageName = $row['pn'];
-	echo Html::beginTag('div', ['class' => 'well']);
+	echo Html::beginTag('pre');
 	foreach ($stack as $line) {
 		if (preg_match('/\d+\s+'.$packageName.'+\s+(0x[0-9a-f]+)\s/', $line)) $line = '<span class="alert-success">'.$line.'</span>';
 		echo $line.'<br>';
 	}
-	echo Html::endTag('div');
+	echo Html::endTag('pre');
 	echo Html::beginForm('', 'get', ['class' => 'well form-horizontal well-sm', 'onsubmit' => 'return false;']);
 		$hash = Yii::$app->getRequest()->getQueryParam('hash', '');
 		echo Html::checkbox('resolve', (bool)Yii::$app->redis->hget('resolved.bugs', $hash), [
