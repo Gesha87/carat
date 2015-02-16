@@ -85,7 +85,7 @@ class SiteController extends Controller
 		}
 		$cookies = Yii::$app->request->cookies;
 		if (!$model->app && $apps) {
-			$app = $cookies['app'];
+			$app = (string)$cookies['app'];
 			if ($app && in_array($app, $apps)) {
 				$model->app = $app;
 			} else {
