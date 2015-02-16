@@ -55,4 +55,21 @@ class AppController extends Controller
 		}
 		Yii::info('Complete', 'acra');
 	}
+
+	public function actionClearInfo($d = 7)
+	{
+		/* @var $db Connection */
+		$db = Yii::$app->mongodb;
+		$collection = $db->getCollection('crash');
+
+		$edge = time() - 3600 * 24 * $d;
+		$condition =  [
+			'user_crash_date' => ['$lt' => new \MongoDate($edge)],
+			'info' => 1,
+		];
+		$count = $collection->find($condition)->count();
+		Yii::info('Found ' . $count . ' info to delete', 'acra');
+		$collection->remove($condition);
+		Yii::info('Complete', 'acra');
+	}
 }
