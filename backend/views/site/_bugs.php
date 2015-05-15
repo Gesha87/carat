@@ -4,10 +4,10 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $model \backend\models\BugFilter */
+/* @var $filter \backend\models\BugFilter */
 /* @var $data \backend\data\MongoArrayDataProvider */
 
-$groupBy = $model->group;
+$groupBy = $filter->group;
 Pjax::begin([
 	'enablePushState' => false,
 	'enableReplaceState' => true,
@@ -30,7 +30,7 @@ echo \yii\grid\GridView::widget([
 			$class = $model['cnt'] > Yii::$app->params['countDanger'] ? 'alert-danger' : '';
 			return "<span class=\"badge $class\">{$model['cnt']}</span>";
 		}],
-		['attribute' => 'stm', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_BUG'), 'format' => 'raw', 'value' => function($model) use ($groupBy) {
+		['attribute' => 'stm', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_BUG'), 'format' => 'raw', 'value' => function($model) use ($groupBy, $filter) {
 			return Html::a(Html::tag('pre', $model['stm'], [
 				'class' => 'stack-trace-mini',
 				'data-toggle' => 'tooltip',
@@ -38,6 +38,7 @@ echo \yii\grid\GridView::widget([
 			]), Url::toRoute(['site/bug',
 				'hash' => $groupBy == 'hash' ? $model['hash'] : $model['hash_mini'],
 				'useful' => $groupBy == 'hash' ? 0 : 1,
+				'app' => $filter->app
 			]), ['data-pjax' => 0]);
 		}],
 		['attribute' => 'avn', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_VERSION_NAME'), 'format' => 'text'],

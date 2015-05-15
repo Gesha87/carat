@@ -148,5 +148,5 @@ echo \miloschuman\highcharts\Highstock::widget([
 	]
 ]);
 
-echo $this->render('_bugs', ['data' => $data, 'model' => $model]);
+echo $this->render('_bugs', ['data' => $data, 'filter' => $model]);
 

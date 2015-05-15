@@ -86,9 +86,12 @@ class ApiController extends Controller
 			$stackTrace = $acraParams['STACK_TRACE'];
 			$stack = explode("\n", $stackTrace);
 			$stackTraceMini = preg_replace('/:.+/', '', $stack[0], 1);
+			$customData = (string)@$acraParams['CUSTOM_DATA'];
+			preg_match('/REAL_PACKAGE_NAME = (.+)/', $customData, $matches);
+			$realPackageName = $matches ? $matches[1] : $packageName;
 			$correctable = false;
 			foreach ($stack as $line) {
-				if (strpos($line, 'at '.$packageName) !== false) {
+				if (strpos($line, 'at '.$realPackageName) !== false) {
 					$stackTraceMini .= "\n...".$line;
 					$correctable = true;
 					break;
@@ -101,6 +104,7 @@ class ApiController extends Controller
 			$userCrashDate = new \MongoDate(strtotime($acraParams['USER_CRASH_DATE']));
 			$document = [
 				'package_name' => $packageName,
+				'real_package_name' => $realPackageName,
 				'hash' => $hash,
 				'hash_mini' => $hashMini,
 				'stack_trace' => iconv('UTF-8', 'UTF-8//IGNORE', $stackTrace),
@@ -111,7 +115,6 @@ class ApiController extends Controller
 				'full_info' => iconv('UTF-8', 'UTF-8//IGNORE', $fullInfo),
 				'resolved' => 0,
 			];
-			$customData = (string)@$acraParams['CUSTOM_DATA'];
 			if (strpos($customData, 'logType = info') !== false) {
 				$document['info'] = 1;
 			}

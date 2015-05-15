@@ -195,7 +195,7 @@ class SiteController extends Controller
 		]);
 
 		if (Yii::$app->request->getIsPjax()) {
-			return $this->renderPartial('_bugs', ['data' => $data, 'model' => $model]);
+			return $this->renderPartial('_bugs', ['data' => $data, 'filter' => $model]);
 		} else {
 			$versions = (new Query())
 				->from('crash')
@@ -270,7 +270,7 @@ class SiteController extends Controller
 		}
 	}
 
-	public function actionBug($hash, $useful)
+	public function actionBug($hash, $useful, $app)
 	{
 		/* @var $db Connection */
 		$db = Yii::$app->mongodb;
@@ -279,19 +279,22 @@ class SiteController extends Controller
 		$field = $useful ? 'hash_mini' : 'hash';
 
 		$count = $collection->find([
-			$field => $hash
+			$field => $hash,
+			'package_name' => $app
 		])->count();
 		$pages = new Pagination([
 			'totalCount' => $count,
 			'defaultPageSize' => Yii::$app->params['countPerPage'],
 		]);
 		$crashes = $collection->find([
-			$field => $hash
+			$field => $hash,
+			'package_name' => $app
 		])->sort(['_id' => -1])->skip($pages->getOffset())->limit($pages->getLimit());
 		$models = [];
 		$iOs = false;
 		foreach ($crashes as $crash) {
 			$fullInfo = Json::decode($crash['full_info']);
+			$fullInfo['real_package_name'] = (string)@$crash['real_package_name'];
 			$fullInfo['resolved'] = (int)@$crash['resolved'];
 			$fullInfo['id'] = (string)$crash['_id'];
 			$fullInfo['st'] = $crash['stack_trace'];

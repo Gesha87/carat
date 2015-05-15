@@ -11,7 +11,7 @@ echo Html::endTag('ul');
 if ($row = reset($data->allModels)) {
 	echo Html::tag('h2', Yii::t('app', 'BUG_STACK_TRACE'));
 	$stack = explode("\n", $row['st']);
-	$packageName = $row['PACKAGE_NAME'];
+	$packageName = $row['real_package_name'] ? $row['real_package_name'] : $row['PACKAGE_NAME'];
 	echo Html::beginTag('div', ['class' => 'well']);
 	foreach ($stack as $line) {
 		$line = str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $line);
