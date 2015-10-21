@@ -118,6 +118,9 @@ class ApiController extends Controller
 			if (strpos($customData, 'logType = info') !== false) {
 				$document['info'] = 1;
 			}
+			if (strpos($customData, 'logType = save') !== false) {
+				$document['info'] = 2;
+			}
 			if ($correctable) {
 				$document['correctable'] = 1;
 			}

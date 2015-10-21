@@ -35,7 +35,11 @@ $form = ActiveForm::begin([
 		'onchange' => '$("#form-filter").submit()',
 	]);
 	echo '&nbsp;';
-	echo $form->field($model, 'info')->radioList([0 => Yii::t('app', 'BUG_FILTER_TYPE_BUG'), 1 => Yii::t('app', 'BUG_FILTER_TYPE_INFO')], [
+	echo $form->field($model, 'info')->radioList([
+		0 => Yii::t('app', 'BUG_FILTER_TYPE_BUG'),
+		1 => Yii::t('app', 'BUG_FILTER_TYPE_INFO'),
+		2 => Yii::t('app', 'BUG_FILTER_TYPE_SAVE'),
+	], [
 		'onchange' => '$("#form-filter").submit()',
 		'data-toggle'=>'buttons',
 		'class' => 'btn-group',

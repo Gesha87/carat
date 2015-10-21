@@ -40,6 +40,7 @@ return [
 	'BUG_CUSTOM_DATA' => 'Custom data',
 	'BUG_FILTER_TYPE_BUG' => 'Bugs',
 	'BUG_FILTER_TYPE_INFO' => 'Info',
+	'BUG_FILTER_TYPE_SAVE' => 'Save',
 	'BUG_FILTER_GROUP_HASH' => 'Group by Stacktrace',
 	'BUG_FILTER_GROUP_HASH_MINI' => 'Group by useful',
 	'BUG_FILTER_VERSION_PROMPT' => 'All versions',

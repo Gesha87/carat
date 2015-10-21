@@ -109,7 +109,7 @@ class SiteController extends Controller
 			$pipelines['match']['$match']['app_version_name'] = $model->version;
 		}
 		if ($model->info) {
-			$pipelines['match']['$match']['info'] = 1;
+			$pipelines['match']['$match']['info'] = (int)$model->info;
 		} else {
 			$pipelines['match']['$match']['info'] = ['$exists' => false];
 		}
