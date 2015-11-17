@@ -14,6 +14,10 @@ echo \yii\grid\GridView::widget([
 	'tableOptions' => [
 		'class' => 'table table-bordered table-condensed',
 	],
+	'pager' => [
+		'firstPageLabel' => '&laquo;&laquo;',
+		'lastPageLabel' => '&raquo;&raquo;',
+	],
 	'columns' => [
 		['attribute' => 'APP_VERSION_NAME', 'label' => Yii::t('app', 'BUG_APP_VERSION_NAME'), 'format' => 'text'],
 		['attribute' => 'APP_VERSION_CODE', 'label' => Yii::t('app', 'BUG_APP_VERSION_CODE'), 'format' => 'text'],
