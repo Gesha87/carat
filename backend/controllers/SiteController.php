@@ -270,26 +270,30 @@ class SiteController extends Controller
 		}
 	}
 
-	public function actionBug($hash, $useful, $app)
+	public function actionBug(array $BugFilter, $useful, $hash)
 	{
 		/* @var $db Connection */
 		$db = Yii::$app->mongodb;
 
+		$model = new BugFilter();
+		if ($BugFilter) {
+			$model->setAttributes($BugFilter);
+		}
+		list($pipelines) = $model->getPipelines();
 		$collection = $db->getCollection('crash');
 		$field = $useful ? 'hash_mini' : 'hash';
-
-		$count = $collection->find([
-			$field => $hash,
-			'package_name' => $app
-		])->count();
+		$pipelines['match']['$match'][$field] = $hash;
+		$pipelines['count'] = ['$group' => ['_id' => null, 'count' => ['$sum' => 1]]];
+		$result = $collection->aggregate(array_values($pipelines));
+		unset($pipelines['count']);
 		$pages = new Pagination([
-			'totalCount' => $count,
+			'totalCount' => (int)@$result[0]['count'],
 			'defaultPageSize' => Yii::$app->params['countPerPage'],
 		]);
-		$crashes = $collection->find([
-			$field => $hash,
-			'package_name' => $app
-		])->sort(['_id' => -1])->skip($pages->getOffset())->limit($pages->getLimit());
+		$pipelines['offset'] = ['$skip' => $pages->getOffset()];
+		$pipelines['limit'] = ['$limit' => $pages->getLimit()];
+		$pipelines['order']['$sort']['_id'] = -1;
+		$crashes = $collection->aggregate(array_values($pipelines));
 		$models = [];
 		$iOs = false;
 		foreach ($crashes as $crash) {

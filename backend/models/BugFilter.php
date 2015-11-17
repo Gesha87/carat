@@ -22,4 +22,42 @@ class BugFilter extends Model
 			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot', 'correctable', 'dateRange', 'hideResolved'], 'safe']
 		];
 	}
+
+	public function getPipelines()
+	{
+		$pipelines = [];
+		$pipelines['match']['$match']['package_name'] = (string)$this->app;
+		if ($this->version) {
+			$pipelines['match']['$match']['app_version_name'] = $this->version;
+		}
+		if ($this->info) {
+			$pipelines['match']['$match']['info'] = (int)$this->info;
+		} else {
+			$pipelines['match']['$match']['info'] = ['$exists' => false];
+		}
+		if ($this->correctable) {
+			$pipelines['match']['$match']['correctable'] = 1;
+		}
+		$to = strtotime(date('Y-m-d'));
+		$from = $to - 3600 * 24 * 7;
+		if ($this->dateRange) {
+			$parts = explode(' - ', $this->dateRange);
+			if (count($parts) == 2) {
+				$from = strtotime($parts[0]);
+				$to = strtotime($parts[1]);
+			}
+			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
+		}
+		$pipelinesGraph = $pipelines;
+		if ($this->search) {
+			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$this->search/i");
+		}
+		if ($this->searchNot) {
+			$parts = explode(';', $this->searchNot);
+			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoRegex("/$i/i"); }, $parts);
+			$pipelines['notmatch']['$match']['stack_trace']['$not']['$in'] = $searchArray;
+		}
+
+		return [$pipelines, $pipelinesGraph];
+	}
 }

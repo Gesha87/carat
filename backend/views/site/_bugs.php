@@ -38,7 +38,7 @@ echo \yii\grid\GridView::widget([
 			]), Url::toRoute(['site/bug',
 				'hash' => $groupBy == 'hash' ? $model['hash'] : $model['hash_mini'],
 				'useful' => $groupBy == 'hash' ? 0 : 1,
-				'app' => $filter->app
+				'BugFilter' => $filter->attributes
 			]), ['data-pjax' => 0]);
 		}],
 		['attribute' => 'avn', 'label' => Yii::t('app', 'DASHBOARD_TABLE_HEADER_VERSION_NAME'), 'format' => 'text'],
