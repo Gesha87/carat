@@ -103,19 +103,7 @@ class SiteController extends Controller
 			'expire' => time() + 3600 * 24 * 30
 		]));
 		$collection = $db->getCollection('crash');
-		$pipelines = [];
-		$pipelines['match']['$match']['package_name'] = (string)$model->app;
-		if ($model->version) {
-			$pipelines['match']['$match']['app_version_name'] = $model->version;
-		}
-		if ($model->info) {
-			$pipelines['match']['$match']['info'] = (int)$model->info;
-		} else {
-			$pipelines['match']['$match']['info'] = ['$exists' => false];
-		}
-		if ($model->correctable) {
-			$pipelines['match']['$match']['correctable'] = 1;
-		}
+		list($pipelines, $pipelinesGraph, $from, $to) = $model->getPipelines();
 		$sort = new Sort([
 			'attributes' => [
 				'id' => ['default' => SORT_DESC],
@@ -127,26 +115,6 @@ class SiteController extends Controller
 		$group = '$hash_mini';
 		if ($groupBy = $model->group) {
 			$group = $groupBy == 'hash' ? '$hash' : '$hash_mini';
-		}
-
-		$to = strtotime(date('Y-m-d'));
-		$from = $to - 3600 * 24 * 7;
-		if ($model->dateRange) {
-			$parts = explode(' - ', $model->dateRange);
-			if (count($parts) == 2) {
-				$from = strtotime($parts[0]);
-				$to = strtotime($parts[1]);
-			}
-			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
-		}
-		$pipelinesGraph = $pipelines;
-		if ($model->search) {
-			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$model->search/i");
-		}
-		if ($model->searchNot) {
-			$parts = explode(';', $model->searchNot);
-			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoRegex("/$i/i"); }, $parts);
-			$pipelines['notmatch']['$match']['stack_trace']['$not']['$in'] = $searchArray;
 		}
 		$pipelines['group'] = [
 			'$group' => [
@@ -206,7 +174,7 @@ class SiteController extends Controller
 				$versions[$i] = Yii::t('app', 'BUG_FILTER_VERSION').' '.$v;
 			}
 			uksort($versions, function($first, $second) {
-				return version_compare($first, $second, '>');
+				return version_compare($first, $second, '<');
 			});
 
 			$dataGraph = [];

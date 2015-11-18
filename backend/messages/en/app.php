@@ -44,6 +44,7 @@ return [
 	'BUG_FILTER_GROUP_HASH' => 'Group by Stacktrace',
 	'BUG_FILTER_GROUP_HASH_MINI' => 'Group by useful',
 	'BUG_FILTER_VERSION_PROMPT' => 'All versions',
+	'BUG_FILTER_VERSION_CODE' => 'Version code',
 	'BUG_FILTER_VERSION' => 'Version',
 	'BUG_FILTER_PERIOD_PROMPT' => 'Period',
 	'BUG_FILTER_PERIOD_DAY' => 'Day',

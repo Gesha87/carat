@@ -74,6 +74,10 @@ $form = ActiveForm::begin([
 		'class' => 'selectpicker',
 		'onchange' => '$("#form-filter").submit()',
 	]);
+	echo '&nbsp;';
+	echo $form->field($model, 'code')->textInput([
+		'placeholder' => Yii::t('app', 'BUG_FILTER_VERSION_CODE'),
+	]);
 	echo '<br>';
 	echo $form->field($model, 'dateRange')->widget(DateRangePicker::className(), [
 		'readonly' => true,

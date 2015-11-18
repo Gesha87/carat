@@ -7,6 +7,7 @@ class BugFilter extends Model
 {
 	public $info = 0;
 	public $version = '';
+	public $code = '';
 	public $period = '';
 	public $group = 'hash_mini';
 	public $app = '';
@@ -19,7 +20,7 @@ class BugFilter extends Model
 	public function rules()
 	{
 		return [
-			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot', 'correctable', 'dateRange', 'hideResolved'], 'safe']
+			[['info', 'version', 'period', 'group', 'app', 'search', 'searchNot', 'correctable', 'dateRange', 'hideResolved', 'code'], 'safe']
 		];
 	}
 
@@ -29,6 +30,9 @@ class BugFilter extends Model
 		$pipelines['match']['$match']['package_name'] = (string)$this->app;
 		if ($this->version) {
 			$pipelines['match']['$match']['app_version_name'] = $this->version;
+		}
+		if ($this->code) {
+			$pipelines['match']['$match']['app_version_code'] = $this->code;
 		}
 		if ($this->info) {
 			$pipelines['match']['$match']['info'] = (int)$this->info;
@@ -58,6 +62,6 @@ class BugFilter extends Model
 			$pipelines['notmatch']['$match']['stack_trace']['$not']['$in'] = $searchArray;
 		}
 
-		return [$pipelines, $pipelinesGraph];
+		return [$pipelines, $pipelinesGraph, $from, $to];
 	}
 }
