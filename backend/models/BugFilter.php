@@ -32,7 +32,7 @@ class BugFilter extends Model
 			$pipelines['match']['$match']['app_version_name'] = $this->version;
 		}
 		if ($this->code) {
-			$pipelines['match']['$match']['app_version_code'] = $this->code;
+			$pipelines['match']['$match']['app_version_code'] = (int)$this->code;
 		}
 		if ($this->info) {
 			$pipelines['match']['$match']['info'] = (int)$this->info;
