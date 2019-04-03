@@ -101,7 +101,7 @@ class ApiController extends Controller
 			$hash = md5($stackTrace);
 			$appVersionName = $acraParams['APP_VERSION_NAME'];
 			$appVersionCode = (int)$acraParams['APP_VERSION_CODE'];
-			$userCrashDate = new \MongoDate(strtotime($acraParams['USER_CRASH_DATE']));
+			$userCrashDate = new \MongoDB\BSON\UTCDateTime(strtotime($acraParams['USER_CRASH_DATE']) * 1000);
 			$document = [
 				'package_name' => $packageName,
 				'real_package_name' => $realPackageName,
@@ -183,10 +183,10 @@ class ApiController extends Controller
 						$miniLog = preg_replace(['/[\t\p{Zs}]+/', '/0x[0-9a-f]+/'], [' ', 'addr'], $miniLog);
 					}
 				}
-				$userCrashDate = new \MongoDate(time());
+				$userCrashDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
 				preg_match('/Date\/Time:\s+(.*)/', $log, $matches);
 				if ($matches) {
-					$userCrashDate = new \MongoDate(strtotime($matches[1]));
+					$userCrashDate = new \MongoDB\BSON\UTCDateTime(strtotime($matches[1]) * 1000);
 				}
 				$fullInfo = [
 					'crash' => $fullLog,

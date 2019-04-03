@@ -181,7 +181,7 @@ class SiteController extends Controller
 			for ($i = $from; $i <= $to; $i += 3600 * 24) {
 				$dataGraph[$i] = array($i * 1000, 0);
 			}
-			$pipelinesGraph['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
+			$pipelinesGraph['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDB\BSON\UTCDateTime($from * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(($to + 3600 * 24) * 1000)];
 			$pipelinesGraph['graph'] = [
 				'$group' => [
 					'_id' => [

@@ -35,7 +35,7 @@ class AppController extends Controller
 		}
 
 		$edge = time() - 3600 * 24 * $d;
-		$condition =  ['user_crash_date' => ['$lt' => new \MongoDate($edge)]];
+		$condition =  ['user_crash_date' => ['$lt' => new \MongoDB\BSON\UTCDateTime($edge * 1000)]];
 		if ($nor) {
 			$condition['$nor'] = $nor;
 		}
@@ -64,7 +64,7 @@ class AppController extends Controller
 
 		$edge = time() - 3600 * 24 * $d;
 		$condition =  [
-			'user_crash_date' => ['$lt' => new \MongoDate($edge)],
+			'user_crash_date' => ['$lt' => new \MongoDB\BSON\UTCDateTime($edge * 1000)],
 			'info' => 1,
 		];
 		$count = $collection->find($condition)->count();

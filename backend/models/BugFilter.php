@@ -50,15 +50,15 @@ class BugFilter extends Model
 				$from = strtotime($parts[0]);
 				$to = strtotime($parts[1]);
 			}
-			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDate($from), '$lte' => new \MongoDate($to + 3600 * 24)];
+			$pipelines['match']['$match']['user_crash_date'] = ['$gte' => new \MongoDB\BSON\UTCDateTime($from * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(($to + 3600 * 24) * 1000)];
 		}
 		$pipelinesGraph = $pipelines;
 		if ($this->search) {
-			$pipelines['match']['$match']['full_info'] = new \MongoRegex("/$this->search/i");
+			$pipelines['match']['$match']['full_info'] = new \MongoDB\BSON\Regex("/$this->search/i");
 		}
 		if ($this->searchNot) {
 			$parts = explode(';', $this->searchNot);
-			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoRegex("/$i/i"); }, $parts);
+			$searchArray = array_map(function($i) { $i = trim($i); return new \MongoDB\BSON\Regex("/$i/i"); }, $parts);
 			$pipelines['notmatch']['$match']['stack_trace']['$not']['$in'] = $searchArray;
 		}
 
