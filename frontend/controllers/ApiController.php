@@ -193,7 +193,7 @@ class ApiController extends Controller
 					'model' => $model,
 					'systemVersion' => $systemVersion,
 					'appVersion' => $appVersion,
-					'userCrashDate' => $userCrashDate->sec,
+					'userCrashDate' => $userCrashDate->getTimestamp(),
 				];
 				$document = [
 					'package_name' => $appName . ' (iPhone)',
